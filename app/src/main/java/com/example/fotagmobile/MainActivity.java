@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
 
         return super.onOptionsItemSelected(item);
     }
-
+/*
     public void setStars() {
         int stars = model.getStars();
         for (int i = 0; i < starButtonArray.size(); i++) {
@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
             }
         }
     }
-
+*/
     public void loadImages() {
         //loadSample((R.drawable.sample1));
         //loadSample((R.drawable.sample2));
@@ -113,7 +113,6 @@ public class MainActivity extends AppCompatActivity implements Observer {
 
         ImageButton thumbnail = new ImageButton(getApplicationContext());
         thumbnail.setImageResource(drawableInt);
-
         thumbnail.setAdjustViewBounds(true);
         thumbnail.setScaleType(ImageView.ScaleType.FIT_XY);
         linearLayout.addView(thumbnail);
@@ -139,16 +138,30 @@ public class MainActivity extends AppCompatActivity implements Observer {
         RatingBar ratingBar = new RatingBar(getApplicationContext());
         ratingBar.setNumStars(5);
         ratingBar.setStepSize(1);
-        //ViewGroup.LayoutParams params = ratingBar.getLayoutParams();
-        //params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-        //params.width = ViewGroup.LayoutParams.WRAP_CONTENT;
         ratingBar.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                if(fromUser) {
+                    Log.d("gfdgdfgd", "fromuser");
+                    if (model.getStars() == (int) rating) {
+                        Log.d("gdfgdf", "test");
+                        ratingBar.setRating(0F);
+                        model.setStars(0);
+                    }
+                    else {
+                        model.setStars((int) rating);
+
+                    }
+                }
+            }
+        });
         linearLayout.addView(ratingBar);
 
         linearLayout.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP);
         gridLayout.addView(linearLayout);
     }
-
+/*
     public void rating1(View view) {
         if (model.getStars() == 1) {
             model.setStars(0);
@@ -193,11 +206,11 @@ public class MainActivity extends AppCompatActivity implements Observer {
             model.setStars(5);
         }
     }
-
+*/
     @Override
     public void update(Observable o, Object arg) {
         if (arg == "stars") {
-            setStars();
+            //setStars();
         }
     }
 
