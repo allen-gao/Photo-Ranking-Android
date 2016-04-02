@@ -1,6 +1,7 @@
 package com.example.fotagmobile;
 
 import android.app.ActionBar;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.os.Bundle;
@@ -93,12 +94,13 @@ public class MainActivity extends AppCompatActivity implements Observer {
     public void loadImages() {
         //loadSample((R.drawable.sample1));
         //loadSample((R.drawable.sample2));
-        loadSample((R.drawable.sample3));
-        loadSample((R.drawable.sample4));
+        //loadSample((R.drawable.sample3));
+        //loadSample((R.drawable.sample4));
         //loadSample((R.drawable.sample5));
-        loadSample((R.drawable.sample6));
-        loadSample((R.drawable.sample7));
+        //loadSample((R.drawable.sample6));
+        //loadSample((R.drawable.sample7));
         //loadSample((R.drawable.sample8));
+        loadSample(R.drawable.star_full);
 
     }
 
@@ -106,6 +108,8 @@ public class MainActivity extends AppCompatActivity implements Observer {
         GridLayout gridLayout = (GridLayout) findViewById(R.id.imageLayout);
         LinearLayout linearLayout = new LinearLayout(getApplicationContext());
         linearLayout.setOrientation(LinearLayout.VERTICAL);
+        linearLayout.setBackgroundColor(Color.GRAY);
+        linearLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
         ImageButton thumbnail = new ImageButton(getApplicationContext());
         thumbnail.setImageResource(drawableInt);
