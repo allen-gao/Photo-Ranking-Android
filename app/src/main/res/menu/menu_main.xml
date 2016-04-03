@@ -6,4 +6,8 @@
         android:title="@string/load_images"
         android:orderInCategory="100"
         app:showAsAction="never" />
+    <item android:id="@+id/clear_rating"
+        android:title="@string/clear_rating"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
 </menu>

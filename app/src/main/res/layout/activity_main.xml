@@ -19,43 +19,9 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay">
-<!--
-            <ImageButton
-                android:id="@+id/star1"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:src="@drawable/star_empty"
-                android:onClick="rating1" />
 
-            <ImageButton
-                android:id="@+id/star2"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:src="@drawable/star_empty"
-                android:onClick="rating2" />
-
-            <ImageButton
-                android:id="@+id/star3"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:src="@drawable/star_empty"
-                android:onClick="rating3" />
-
-            <ImageButton
-                android:id="@+id/star4"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:src="@drawable/star_empty"
-                android:onClick="rating4" />
-
-            <ImageButton
-                android:id="@+id/star5"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:src="@drawable/star_empty"
-                android:onClick="rating5" />
--->
             <RatingBar
+                android:id="@+id/ratingBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:numStars="5"

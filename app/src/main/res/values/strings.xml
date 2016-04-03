@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Fotag Mobile</string>
     <string name="load_images">Load Images</string>
+    <string name="clear_rating">Clear Rating</string>
 </resources>

@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
+import android.media.Rating;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -30,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
     Model model;
 
     ArrayList<ImageButton> starButtonArray;
+    RatingBar ratingBar;
 
 
     @Override
@@ -41,19 +44,14 @@ public class MainActivity extends AppCompatActivity implements Observer {
 
         model = new Model(this);
         model.addObserver(this);
-        /*
-        ImageButton star1 = (ImageButton) findViewById(R.id.star1);
-        ImageButton star2 = (ImageButton) findViewById(R.id.star2);
-        ImageButton star3 = (ImageButton) findViewById(R.id.star3);
-        ImageButton star4 = (ImageButton) findViewById(R.id.star4);
-        ImageButton star5 = (ImageButton) findViewById(R.id.star5);
-        starButtonArray = new ArrayList<ImageButton>();
-        starButtonArray.add(star1);
-        starButtonArray.add(star2);
-        starButtonArray.add(star3);
-        starButtonArray.add(star4);
-        starButtonArray.add(star5);
-        */
+
+        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                model.setStars((int) rating);
+            }
+        });
     }
 
     @Override
@@ -73,6 +71,11 @@ public class MainActivity extends AppCompatActivity implements Observer {
         //noinspection SimplifiableIfStatement
         if (id == R.id.load_images) {
             loadImages();
+            return true;
+        }
+
+        if (id == R.id.clear_rating) {
+            clearRating();
             return true;
         }
 
@@ -135,82 +138,38 @@ public class MainActivity extends AppCompatActivity implements Observer {
         buttonLayout.addView(star5);
         linearLayout.addView(buttonLayout);
 */
-        RatingBar ratingBar = new RatingBar(getApplicationContext());
+        final RatingBar ratingBar = new RatingBar(getApplicationContext());
         ratingBar.setNumStars(5);
         ratingBar.setStepSize(1);
         ratingBar.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-            @Override
-            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                if(fromUser) {
-                    Log.d("gfdgdfgd", "fromuser");
-                    if (model.getStars() == (int) rating) {
-                        Log.d("gdfgdf", "test");
-                        ratingBar.setRating(0F);
-                        model.setStars(0);
-                    }
-                    else {
-                        model.setStars((int) rating);
+        linearLayout.addView(ratingBar);
 
-                    }
-                }
+        Button clearButton = new Button(getApplicationContext());
+        clearButton.setText("Clear Rating");
+        clearButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ratingBar.setRating(0);
             }
         });
-        linearLayout.addView(ratingBar);
+        linearLayout.addView(clearButton);
 
         linearLayout.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP);
         gridLayout.addView(linearLayout);
     }
-/*
-    public void rating1(View view) {
-        if (model.getStars() == 1) {
-            model.setStars(0);
-        }
-        else {
-            model.setStars(1);
-        }
+
+    public void clearRating() {
+        ratingBar.setRating(0);
     }
 
-    public void rating2(View view) {
-        if (model.getStars() == 2) {
-            model.setStars(0);
-        }
-        else {
-            model.setStars(2);
-        }
+    public void filterImages() {
+
     }
 
-    public void rating3(View view) {
-        if (model.getStars() == 3) {
-            model.setStars(0);
-        }
-        else {
-            model.setStars(3);
-        }
-    }
-
-    public void rating4(View view) {
-        if (model.getStars() == 4) {
-            model.setStars(0);
-        }
-        else {
-            model.setStars(4);
-        }
-    }
-
-    public void rating5(View view) {
-        if (model.getStars() == 5) {
-            model.setStars(0);
-        }
-        else {
-            model.setStars(5);
-        }
-    }
-*/
     @Override
     public void update(Observable o, Object arg) {
         if (arg == "stars") {
-            //setStars();
+            filterImages();
         }
     }
 
