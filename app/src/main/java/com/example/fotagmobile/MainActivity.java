@@ -1,6 +1,8 @@
 package com.example.fotagmobile;
 
 import android.app.ActionBar;
+import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
@@ -32,6 +34,8 @@ public class MainActivity extends AppCompatActivity implements Observer {
     Model model;
 
     RatingBar ratingBar;
+
+    MainActivity self = this;
 
     // panels and ratingBars share the same index
     ArrayList<LinearLayout> panels;
@@ -84,30 +88,23 @@ public class MainActivity extends AppCompatActivity implements Observer {
             return true;
         }
 
+        if (id == R.id.clear_all) {
+            clearAll();
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
-/*
-    public void setStars() {
-        int stars = model.getStars();
-        for (int i = 0; i < starButtonArray.size(); i++) {
-            if (stars >= i+1) {
-                starButtonArray.get(i).setImageResource(R.drawable.star_full);
-            }
-            else {
-                starButtonArray.get(i).setImageResource(R.drawable.star_empty);
-            }
-        }
-    }
-*/
+
     public void loadImages() {
         //loadSample((R.drawable.sample1));
         //loadSample((R.drawable.sample2));
         //loadSample((R.drawable.sample3));
         //loadSample((R.drawable.sample4));
         //loadSample((R.drawable.sample5));
-        //loadSample((R.drawable.sample6));
-        //loadSample((R.drawable.sample7));
-        //loadSample((R.drawable.sample8));
+        loadSample((R.drawable.sample6));
+        loadSample((R.drawable.sample7));
+        loadSample((R.drawable.sample8));
         loadSample(R.drawable.star_full);
 
     }
@@ -117,12 +114,32 @@ public class MainActivity extends AppCompatActivity implements Observer {
         LinearLayout linearLayout = new LinearLayout(getApplicationContext());
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         linearLayout.setBackgroundColor(Color.GRAY);
-        linearLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-        ImageButton thumbnail = new ImageButton(getApplicationContext());
+        linearLayout.setLayoutParams(new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                1.0f)
+        );
+
+/*
+        GridLayout.LayoutParams parem = new GridLayout.LayoutParams(GridLayout.spec(GridLayout.UNDEFINED, 1f),      GridLayout.spec(GridLayout.UNDEFINED, 1f));
+        linearLayout.setLayoutParams(parem);
+*/
+        final ImageButton thumbnail = new ImageButton(getApplicationContext());
         thumbnail.setImageResource(drawableInt);
+        thumbnail.setTag(drawableInt); // because ImageButton.getImageResource doesn't exist
         thumbnail.setAdjustViewBounds(true);
         thumbnail.setScaleType(ImageView.ScaleType.FIT_XY);
+        thumbnail.setOnClickListener(new ImageButton.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ImageActivity.class);
+                intent.putExtra("imageResource", (Integer) thumbnail.getTag());
+                startActivity(intent);
+            }
+        });
+
+
         linearLayout.addView(thumbnail);
 
         final RatingBar ratingBar = new RatingBar(getApplicationContext());
@@ -142,10 +159,21 @@ public class MainActivity extends AppCompatActivity implements Observer {
         linearLayout.addView(clearButton);
 
         linearLayout.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP);
+
         gridLayout.addView(linearLayout);
 
         panels.add(linearLayout);
         ratingBars.add(ratingBar);
+    }
+
+    public void clearAll() {
+        for (int i = 0; i < panels.size(); i++) {
+            LinearLayout panel = panels.get(i);
+            panel.removeAllViews();
+            panel.setVisibility(LinearLayout.GONE);
+        }
+        panels.clear();
+        ratingBars.clear();
     }
 
     public void clearRating() {
@@ -168,6 +196,16 @@ public class MainActivity extends AppCompatActivity implements Observer {
         if (arg == "stars") {
             filterImages();
         }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+
+        super.onConfigurationChanged(newConfig);
+        setContentView(R.layout.activity_main);
+        // TODO
+
+        Log.d("test", "test");
     }
 
 }
