@@ -31,9 +31,11 @@ public class MainActivity extends AppCompatActivity implements Observer {
 
     Model model;
 
-    ArrayList<ImageButton> starButtonArray;
     RatingBar ratingBar;
 
+    // panels and ratingBars share the same index
+    ArrayList<LinearLayout> panels;
+    ArrayList<RatingBar> ratingBars;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,9 @@ public class MainActivity extends AppCompatActivity implements Observer {
 
         model = new Model(this);
         model.addObserver(this);
+
+        panels = new ArrayList<LinearLayout>();
+        ratingBars = new ArrayList<RatingBar>();
 
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
@@ -119,25 +124,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
         thumbnail.setAdjustViewBounds(true);
         thumbnail.setScaleType(ImageView.ScaleType.FIT_XY);
         linearLayout.addView(thumbnail);
-/*
-        LinearLayout buttonLayout = new LinearLayout(getApplicationContext());
-        ImageButton star1 = new ImageButton(getApplicationContext());
-        star1.setImageResource(R.drawable.star_empty);
-        ImageButton star2 = new ImageButton(getApplicationContext());
-        star2.setImageResource(R.drawable.star_empty);
-        ImageButton star3 = new ImageButton(getApplicationContext());
-        star3.setImageResource(R.drawable.star_empty);
-        ImageButton star4 = new ImageButton(getApplicationContext());
-        star4.setImageResource(R.drawable.star_empty);
-        ImageButton star5 = new ImageButton(getApplicationContext());
-        star5.setImageResource(R.drawable.star_empty);
-        buttonLayout.addView(star1);
-        buttonLayout.addView(star2);
-        buttonLayout.addView(star3);
-        buttonLayout.addView(star4);
-        buttonLayout.addView(star5);
-        linearLayout.addView(buttonLayout);
-*/
+
         final RatingBar ratingBar = new RatingBar(getApplicationContext());
         ratingBar.setNumStars(5);
         ratingBar.setStepSize(1);
@@ -156,6 +143,9 @@ public class MainActivity extends AppCompatActivity implements Observer {
 
         linearLayout.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP);
         gridLayout.addView(linearLayout);
+
+        panels.add(linearLayout);
+        ratingBars.add(ratingBar);
     }
 
     public void clearRating() {
@@ -163,7 +153,14 @@ public class MainActivity extends AppCompatActivity implements Observer {
     }
 
     public void filterImages() {
-
+        for (int i = 0; i < ratingBars.size(); i++) {
+            if (ratingBars.get(i).getRating() < model.getStars()) {
+                panels.get(i).setVisibility(LinearLayout.GONE);
+            }
+            else {
+                panels.get(i).setVisibility(LinearLayout.VISIBLE);
+            }
+        }
     }
 
     @Override
