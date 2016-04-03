@@ -1,22 +1,18 @@
 package com.example.fotagmobile;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
-import android.media.Rating;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridLayout;
@@ -24,7 +20,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
+import android.widget.SearchView;
 
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
@@ -67,6 +66,24 @@ public class MainActivity extends AppCompatActivity implements Observer {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.search_menu, menu);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.searchView));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Log.d("test", query);
+                UrlTask urlTask = new UrlTask(self, query);
+                urlTask.execute();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
+
         return true;
     }
 
@@ -102,23 +119,23 @@ public class MainActivity extends AppCompatActivity implements Observer {
         //loadSample((R.drawable.sample3));
         //loadSample((R.drawable.sample4));
         //loadSample((R.drawable.sample5));
-        loadSample((R.drawable.sample6));
-        loadSample((R.drawable.sample7));
-        loadSample((R.drawable.sample8));
-        loadSample(R.drawable.star_full);
+        loadSample(R.drawable.sample6, null);
+        loadSample(R.drawable.sample7, null);
+        loadSample(R.drawable.sample8, null);
+        loadSample(R.drawable.star_full, null);
 
     }
 
-    public void loadSample(int drawableInt) {
+    public void loadSample(int drawableInt, Drawable drawable) {
         GridLayout gridLayout = (GridLayout) findViewById(R.id.imageLayout);
         LinearLayout linearLayout = new LinearLayout(getApplicationContext());
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         linearLayout.setBackgroundColor(Color.GRAY);
 
         linearLayout.setLayoutParams(new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                1.0f)
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        1.0f)
         );
 
 /*
@@ -126,8 +143,16 @@ public class MainActivity extends AppCompatActivity implements Observer {
         linearLayout.setLayoutParams(parem);
 */
         final ImageButton thumbnail = new ImageButton(getApplicationContext());
-        thumbnail.setImageResource(drawableInt);
-        thumbnail.setTag(drawableInt); // because ImageButton.getImageResource doesn't exist
+
+        if (drawable != null) {
+            Log.d("test", "used");
+            thumbnail.setBackground(drawable);
+        }
+        else {
+            thumbnail.setImageResource(drawableInt);
+            thumbnail.setTag(drawableInt); // because ImageButton.getImageResource doesn't exist
+        }
+
         thumbnail.setAdjustViewBounds(true);
         thumbnail.setScaleType(ImageView.ScaleType.FIT_XY);
         thumbnail.setOnClickListener(new ImageButton.OnClickListener() {
