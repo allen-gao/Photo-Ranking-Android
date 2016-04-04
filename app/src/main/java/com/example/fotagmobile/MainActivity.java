@@ -1,8 +1,12 @@
 package com.example.fotagmobile;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
@@ -22,6 +26,10 @@ import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.SearchView;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
@@ -31,9 +39,7 @@ import java.util.Observer;
 public class MainActivity extends AppCompatActivity implements Observer {
 
     Model model;
-
     RatingBar ratingBar;
-
     MainActivity self = this;
 
     // panels and ratingBars share the same index
@@ -114,19 +120,17 @@ public class MainActivity extends AppCompatActivity implements Observer {
     }
 
     public void loadImages() {
-        //loadSample((R.drawable.sample1));
-        //loadSample((R.drawable.sample2));
-        //loadSample((R.drawable.sample3));
-        //loadSample((R.drawable.sample4));
-        //loadSample((R.drawable.sample5));
-        loadSample(R.drawable.sample6, null);
-        loadSample(R.drawable.sample7, null);
-        loadSample(R.drawable.sample8, null);
-        loadSample(R.drawable.star_full, null);
-
+        loadSample(BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.sample1));
+        loadSample(BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.sample2));
+        loadSample(BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.sample3));
+        loadSample(BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.sample4));
+        loadSample(BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.sample5));
+        loadSample(BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.sample6));
+        loadSample(BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.sample7));
+        loadSample(BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.sample8));
     }
 
-    public void loadSample(int drawableInt, Drawable drawable) {
+    public void loadSample(final Bitmap bitmap) {
         GridLayout gridLayout = (GridLayout) findViewById(R.id.imageLayout);
         LinearLayout linearLayout = new LinearLayout(getApplicationContext());
         linearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -134,8 +138,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
 
         linearLayout.setLayoutParams(new LinearLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        1.0f)
+                        ViewGroup.LayoutParams.WRAP_CONTENT)
         );
 
 /*
@@ -143,24 +146,26 @@ public class MainActivity extends AppCompatActivity implements Observer {
         linearLayout.setLayoutParams(parem);
 */
         final ImageButton thumbnail = new ImageButton(getApplicationContext());
-
-        if (drawable != null) {
-            Log.d("test", "used");
-            thumbnail.setBackground(drawable);
-        }
-        else {
-            thumbnail.setImageResource(drawableInt);
-            thumbnail.setTag(drawableInt); // because ImageButton.getImageResource doesn't exist
-        }
-
+        thumbnail.setImageBitmap(bitmap);
         thumbnail.setAdjustViewBounds(true);
-        thumbnail.setScaleType(ImageView.ScaleType.FIT_XY);
+        thumbnail.setScaleType(ImageButton.ScaleType.FIT_XY);
         thumbnail.setOnClickListener(new ImageButton.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ImageActivity.class);
-                intent.putExtra("imageResource", (Integer) thumbnail.getTag());
-                startActivity(intent);
+                String fileName = "bitmap_file";
+                try {
+                    FileOutputStream fos = openFileOutput(fileName, Context.MODE_PRIVATE);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                    fos.close();
+                    Intent intent = new Intent(getApplicationContext(), ImageActivity.class);
+                    startActivity(intent);
+                }
+                catch(FileNotFoundException e) {
+                    Log.e("FileNotFoundException", e.toString());
+                }
+                catch(IOException e) {
+                    Log.e("IOException", e.toString());
+                }
             }
         });
 

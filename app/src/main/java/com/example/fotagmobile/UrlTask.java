@@ -1,10 +1,12 @@
 package com.example.fotagmobile;
 
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import java.io.InputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 public class UrlTask extends AsyncTask {
@@ -19,19 +21,21 @@ public class UrlTask extends AsyncTask {
 
     @Override
     protected Object doInBackground(Object[] params) {
-
         try {
-            InputStream is = (InputStream) new URL(url).getContent();
-            final Drawable d = Drawable.createFromStream(is, "src name");
+            URL myUrl = new URL(url);
+            final Bitmap bitmap = BitmapFactory.decodeStream(myUrl.openConnection().getInputStream());
             mainActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mainActivity.loadSample(0, d);
+                    mainActivity.loadSample(bitmap);
                 }
             });
-        } catch (Exception e) {
-            // handle error
-            Log.d("error", "" + e);
+        }
+        catch(MalformedURLException e) {
+            Log.e("MalformedURLException", e.toString());
+        }
+        catch(IOException e) {
+            Log.e("IOException", e.toString());
         }
         return null;
     }
