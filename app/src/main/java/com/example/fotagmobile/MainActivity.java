@@ -19,8 +19,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.SearchView;
 
 import java.io.FileNotFoundException;
@@ -133,14 +135,13 @@ public class MainActivity extends AppCompatActivity implements Observer {
         linearLayout.setBackgroundColor(Color.GRAY);
 
         linearLayout.setLayoutParams(new LinearLayout.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT)
         );
+        linearLayout.setGravity(Gravity.BOTTOM);
+        GridLayout.LayoutParams layoutParams = new GridLayout.LayoutParams(GridLayout.spec(GridLayout.UNDEFINED, 1f), GridLayout.spec(GridLayout.UNDEFINED, 1f));
+        linearLayout.setLayoutParams(layoutParams);
 
-/*
-        GridLayout.LayoutParams parem = new GridLayout.LayoutParams(GridLayout.spec(GridLayout.UNDEFINED, 1f),      GridLayout.spec(GridLayout.UNDEFINED, 1f));
-        linearLayout.setLayoutParams(parem);
-*/
         final ImageButton thumbnail = new ImageButton(getApplicationContext());
         thumbnail.setImageBitmap(bitmap);
         thumbnail.setAdjustViewBounds(true);
@@ -155,17 +156,13 @@ public class MainActivity extends AppCompatActivity implements Observer {
                     fos.close();
                     Intent intent = new Intent(getApplicationContext(), ImageActivity.class);
                     startActivity(intent);
-                }
-                catch(FileNotFoundException e) {
+                } catch (FileNotFoundException e) {
                     Log.e("FileNotFoundException", e.toString());
-                }
-                catch(IOException e) {
+                } catch (IOException e) {
                     Log.e("IOException", e.toString());
                 }
             }
         });
-
-
         linearLayout.addView(thumbnail);
 
         final RatingBar ratingBar = new RatingBar(getApplicationContext());
@@ -183,8 +180,6 @@ public class MainActivity extends AppCompatActivity implements Observer {
             }
         });
         linearLayout.addView(clearButton);
-
-        linearLayout.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP);
 
         gridLayout.addView(linearLayout);
 
