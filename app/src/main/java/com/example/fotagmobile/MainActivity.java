@@ -6,8 +6,6 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -21,17 +19,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.SearchView;
 
-import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
@@ -128,6 +122,8 @@ public class MainActivity extends AppCompatActivity implements Observer {
         loadSample(BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.sample6));
         loadSample(BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.sample7));
         loadSample(BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.sample8));
+        loadSample(BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.star_empty));
+        loadSample(BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.star_full));
     }
 
     public void loadSample(final Bitmap bitmap) {
@@ -232,8 +228,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
     public void onConfigurationChanged(Configuration newConfig) {
 
         super.onConfigurationChanged(newConfig);
-        setContentView(R.layout.activity_main);
-        // TODO
+        //setContentView(R.layout.activity_main);
 
         Log.d("test", "test");
     }
