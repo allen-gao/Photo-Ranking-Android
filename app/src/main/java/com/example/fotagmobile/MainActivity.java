@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
                         ViewGroup.LayoutParams.WRAP_CONTENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT)
         );
-        linearLayout.setGravity(Gravity.BOTTOM);
+        linearLayout.setGravity(Gravity.BOTTOM | Gravity.CENTER);
         GridLayout.LayoutParams layoutParams = new GridLayout.LayoutParams(GridLayout.spec(GridLayout.UNDEFINED, 1f), GridLayout.spec(GridLayout.UNDEFINED, 1f));
         linearLayout.setLayoutParams(layoutParams);
 
