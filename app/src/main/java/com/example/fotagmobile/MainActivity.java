@@ -19,10 +19,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
-import android.widget.RelativeLayout;
 import android.widget.SearchView;
 
 import java.io.FileNotFoundException;
@@ -73,7 +71,6 @@ public class MainActivity extends AppCompatActivity implements Observer {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Log.d("test", query);
                 UrlTask urlTask = new UrlTask(self, query);
                 urlTask.execute();
                 return false;
@@ -84,34 +81,24 @@ public class MainActivity extends AppCompatActivity implements Observer {
                 return false;
             }
         });
-
-
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.load_images) {
             loadImages();
             return true;
         }
-
         if (id == R.id.clear_rating) {
             clearRating();
             return true;
         }
-
         if (id == R.id.clear_all) {
             clearAll();
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -133,7 +120,6 @@ public class MainActivity extends AppCompatActivity implements Observer {
         LinearLayout linearLayout = new LinearLayout(getApplicationContext());
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         linearLayout.setBackgroundColor(Color.GRAY);
-
         linearLayout.setLayoutParams(new LinearLayout.LayoutParams(
                         ViewGroup.LayoutParams.WRAP_CONTENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT)
@@ -182,7 +168,6 @@ public class MainActivity extends AppCompatActivity implements Observer {
         linearLayout.addView(clearButton);
 
         gridLayout.addView(linearLayout);
-
         panels.add(linearLayout);
         ratingBars.add(ratingBar);
     }
@@ -221,11 +206,6 @@ public class MainActivity extends AppCompatActivity implements Observer {
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
-
         super.onConfigurationChanged(newConfig);
-        //setContentView(R.layout.activity_main);
-
-        Log.d("test", "test");
     }
-
 }
